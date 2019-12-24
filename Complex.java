@@ -1,50 +1,36 @@
 import java.util.*;
 
-public class Complex{
-        //a + bi = rcisx
-        private static double a;
-        private static double b;
+public class Complex
+{
+        double re;
+        double im;
 
-        public Complex(double a, double b)
+        public Complex(double re, double im)
         {
-                this.a = a;
-                this.b = b;
+                this.re = re;
+                this.im = im;
         }
 
-        public static double getRe()
+        /*
+        public static Complex add(Complex z, Complex w)
         {
-                return a;
+                double newRe = z.re + w.re;
+                double newIm = z.im + w.im;
+                return new Complex(newRe, newIm);
         }
+        */
 
-        public static double getIm()
+        public Complex power(double p)
         {
-                return b;
+                double mag = Math.pow(Math.sqrt(re * re + im * im), p);
+                double theta = p * Math.atan(im / re);
+                double newRe = mag * Math.cos(theta);
+                double newIm = mag * Math.sin(theta);
+                return new Complex(newRe, newIm);
         }
 
         public String toString()
         {
-                return a + " + " + b + "i";
-        }
-
-        public static Complex pow(int x)
-        {
-                double r = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-                double theta = Math.atan(b/a);
-                double newR = Math.pow(r, x);
-                double newTheta = x * theta;
-                double newA = newR * Math.cos(newTheta);
-                double newB = newR * Math.sin(newTheta);
-                return new Complex(newA, newB);
-        }
-
-        public static Complex add(Complex w, Complex z)
-        {
-                Complex res = new Complex(w.getRe() + z.getRe(), w.getIm() + z.getIm());
-                return res;
-        }
-
-        public static void main(String[] args) {
-                Complex foo = new Complex(1, 2);
-                System.out.println(foo.getIm().toString());
+                return re + " + " + im + "i";
         }
 }
