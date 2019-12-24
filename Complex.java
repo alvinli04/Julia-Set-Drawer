@@ -11,14 +11,14 @@ public class Complex
                 this.im = im;
         }
 
-        /*
+
         public static Complex add(Complex z, Complex w)
         {
                 double newRe = z.re + w.re;
                 double newIm = z.im + w.im;
                 return new Complex(newRe, newIm);
         }
-        */
+        
 
         public Complex power(double p)
         {
