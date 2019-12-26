@@ -7,11 +7,12 @@ public class Main
         public static void main(String[] args)
         {
                 //read in the imaginary num used as the constant c.
+                /*
+                double reC = Double.valueOf(args[0]);
+                double imC = Double.valueOf(args[1]);
+                */
 
-                double reC = Double.parseDouble(args[0]);
-                double imC = Double.parseDouble(args[1]);
-
-                Complex c = new Complex(reC, imC);
+                Complex c = new Complex(-0.10440881763527066, -0.9236285070140278);
 
                 //drawMandelbrot();
                 drawJulia(c);
