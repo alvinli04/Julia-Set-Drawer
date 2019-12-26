@@ -2,8 +2,8 @@ import java.util.*;
 
 public class Complex
 {
-        double re;
-        double im;
+        final double re;
+        final double im;
 
         public Complex(double re, double im)
         {
@@ -18,15 +18,20 @@ public class Complex
                 double newIm = z.im + w.im;
                 return new Complex(newRe, newIm);
         }
-        
 
-        public Complex power(double p)
+        public static Complex multiply(Complex z, Complex w)
         {
-                double mag = Math.pow(Math.sqrt(re * re + im * im), p);
-                double theta = p * Math.atan(im / re);
-                double newRe = mag * Math.cos(theta);
-                double newIm = mag * Math.sin(theta);
-                return new Complex(newRe, newIm);
+                return new Complex(z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re);
+        }
+
+        public double mag()
+        {
+                return Math.hypot(re, im);
+        }
+
+        public Complex square()
+        {
+                return multiply(this, this);
         }
 
         public String toString()
