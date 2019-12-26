@@ -15,8 +15,9 @@ public class Main
                 c = new Complex(.3, -.01);
 
                 StdDraw.setCanvasSize();
-                //coord mapping: x -> 4x - 2
+                //coord mapping: i from 0-> 1 -> 4x - 2 on complex number
                 StdDraw.setPenColor(StdDraw.BLACK);
+                //iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
                 {
                         for(double j = 0; j <= 1; j+=0.001953125)
@@ -24,15 +25,14 @@ public class Main
                                 Complex z = new Complex(4*i-2, 4*j-2);
                                 if(mandelbrot(z) == -1)
                                 {
-                                        StdDraw.point(i, j);
+                                        StdDraw.point(i, j); //plots i,j on the plane
                                         System.out.println(z);
                                 }
-                                //else System.out.println("not" + z);
                         }
                 }
         }
 
-        public static int inSet(Complex z)
+        public static int julia(Complex z)
         {
                 for(int i = 1; i <= 10000; i++) //i is the number of iterations
                 {
