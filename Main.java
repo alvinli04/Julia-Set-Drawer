@@ -2,7 +2,6 @@ import java.util.*;
 
 public class Main
 {
-        static Complex c;
         //gap: 0.007
         //range: -2 -> 2 everywhere
         public static void main(String[] args)
@@ -12,10 +11,26 @@ public class Main
                 double reC = Double.parseDouble(args[0]);
                 double imC = Double.parseDouble(args[1]);
                 */
-                c = new Complex(.3, -.01);
+                Complex c = new Complex(.3, -.01);
 
+                drawMandelbrot();
+        }
+
+        //Methods for checking if a point is in a Julia set for some Complex c and drawing it.
+        public static int inJulia(Complex z, Complex c)
+        {
+                for(int i = 1; i <= 10000; i++) //i is the number of iterations
+                {
+                        w = Complex.add(w.square(), w);
+                        if(w.mag() > 2) return i; //the number of iterations i corresponds to a certain color in the picture.
+                }
+                return -1;//the number is in the set, the pixel is colored black.
+        }
+
+        public static void drawJulia(Complex c)
+        {
                 StdDraw.setCanvasSize();
-                //coord mapping: i from 0-> 1 -> 4x - 2 on complex number
+                //coord mapping: i from 0-> 1 -> 4x - 2 on complex plane
                 StdDraw.setPenColor(StdDraw.BLACK);
                 //iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
@@ -23,7 +38,7 @@ public class Main
                         for(double j = 0; j <= 1; j+=0.001953125)
                         {
                                 Complex z = new Complex(4*i-2, 4*j-2);
-                                if(mandelbrot(z) == -1)
+                                if(inJulia(z) == -1)
                                 {
                                         StdDraw.point(i, j); //plots i,j on the plane
                                         System.out.println(z);
@@ -32,23 +47,35 @@ public class Main
                 }
         }
 
-        public static int julia(Complex z)
+        //Methods for checking if a point is in the Mandelbrot set and drawing it.
+        public static int inMandelbrot(Complex z)
         {
+                Complex w = new Complex(0,0);
                 for(int i = 1; i <= 10000; i++) //i is the number of iterations
                 {
-                        z = Complex.add(z.square(), c);
-                        if(z.mag() > 2) return i; //the number of iterations i corresponds to a certain color in the picture.
+                        w = Complex.add(w.square(), z);
+                        if(w.mag() > 2) return i; //the number of iterations i corresponds to a certain color in the picture.
                 }
                 return -1;//the number is in the set, the pixel is colored black.
         }
 
-        public static int mandelbrot(Complex z)
+        public static void drawMandelbrot()
         {
-                for(int i = 1; i <= 10000; i++) //i is the number of iterations
+                StdDraw.setCanvasSize();
+                //coord mapping: i from 0-> 1 -> 4x - 2 on complex plane
+                StdDraw.setPenColor(StdDraw.BLACK);
+                //iterate through all pixels to determine whether or not it's in the set.
+                for(double i = 0; i <= 1; i+=0.001953125)
                 {
-                        z = Complex.add(z.square(), z);
-                        if(z.mag() > 2) return i; //the number of iterations i corresponds to a certain color in the picture.
+                        for(double j = 0; j <= 1; j+=0.001953125)
+                        {
+                                Complex z = new Complex(4*i-2, 4*j-2);
+                                if(inMandelbrot(z) == -1)
+                                {
+                                        StdDraw.point(i, j); //plots i,j on the plane
+                                        System.out.println(z);
+                                }
+                        }
                 }
-                return -1;//the number is in the set, the pixel is colored black.
         }
 }
