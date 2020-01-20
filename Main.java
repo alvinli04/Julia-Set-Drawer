@@ -1,29 +1,66 @@
 import java.util.*;
+import java.io.*;
 import java.awt.Color;
 
 public class Main
 {
-        //gap: 0.007
-        //range: -2 -> 2 everywhere
-
         //driver function
-        public static void main(String[] args)
+        public static void main(String[] args) throws IOException
         {
-                //read in the imaginary num used as the constant c.
-                /*
-                double reC = Double.valueOf(args[0]);
-                double imC = Double.valueOf(args[1]);
-                */
-                int[] backgroundConsts = {66, 0}; //background constants correspond to blue, red
-                Complex c = new Complex(0, -.8);
+                float[] backgroundConsts = {0, 66};
+                String[] backgrounds = {"red", "blue"};
+                //background constants correspond to red, blue on the hsb color scale
 
-                drawMandelbrot(66);
-                //drawJulia(c);
-                //test();
+                float myBackground = 66;
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Julia Set or Mandelbrot Set?");
+                String whichSet = sc.nextLine().toLowerCase();
+                //determines whether to draw a Mandelbrot or Julia set
+                if(!whichSet.contains("julia") && !whichSet.contains("mandelbrot"))
+                {
+                        System.out.println("Please indicate whether you would like a Mandelbrot set or a Julia set.");
+                        String[] placeholder = new String[0];
+                        main(placeholder);
+                }
+
+                //asks for background color
+                System.out.print("What color background?\navailable: ");
+                for(String i : backgrounds)
+                {
+                        System.out.print(i + " ");
+                }
+                System.out.println();
+                String myColor = sc.nextLine().toLowerCase();
+                for(int i = 0; i < backgrounds.length; i++){
+                        if(myColor.contains(backgrounds[i])){
+                                myBackground = backgroundConsts[i];
+                                break;
+                        }
+                        System.out.println("color not available, the image will be drawn in blue");
+                }
+
+                Complex c = new Complex(0, 0);
+                if(whichSet.contains("julia"))
+                {
+                        //ask for the complex number to run the Julia Set function
+                        System.out.println("Real part of a complex number:");
+                        double myRe = sc.nextDouble();
+                        System.out.println("Imaginary part of a complex number:");
+                        double myIm = sc.nextDouble();
+                        c = new Complex(myRe, myIm);
+                        drawJulia(c, myBackground);
+			StdDraw.save(c.toString() + ".jpg");
+                }
+                else if(whichSet.contains("mandelbrot"))
+                {
+                        drawMandelbrot(myBackground);
+			StdDraw.save("Mandelbrot.jpg");
+                }
         }
 
         //Methods for checking if a point is in a Julia set for some Complex c and drawing it.
         public static float inJulia(Complex z, Complex c)
+        //z indicates the current pixel referenced, c is the complex constant used in z = z^2 + c.
         {
                 Complex w = z;
                 for(int i = 1; i <= 100; i++) //i is the number of iterations
@@ -41,7 +78,7 @@ public class Main
                 //the number is in the set, the pixel is colored black.
         }
 
-        public static void drawJulia(Complex c)
+        public static void drawJulia(Complex c, float backgroundConst)
         {
                 StdDraw.setCanvasSize();
                 //coord mapping: i from 0-1 -> 4x - 2 on complex plane
@@ -55,16 +92,14 @@ public class Main
                                 {
                                         StdDraw.setPenColor(StdDraw.BLACK);
                                         StdDraw.point(i, j); //plots i,j on the plane
-                                        System.out.println(z);
                                 }
                                 else
                                 {
-                                        StdDraw.setPenColor(Color.getHSBColor((inJulia(z, c) + 66.) / 100, (float) 1, (float) 1));
+                                        StdDraw.setPenColor(Color.getHSBColor((inJulia(z, c) + backgroundConst) / 100, (float) 1, (float) 1));
                                         StdDraw.point(i,j);
                                 }
                         }
                 }
-                //System.out.println("done");
         }
 
         //Methods for checking if a point is in the Mandelbrot set and drawing it.
@@ -85,10 +120,9 @@ public class Main
                 return -1;//the number is in the set, the pixel is colored black.
         }
 
-        public static void drawMandelbrot(int backgroundConst)
+        public static void drawMandelbrot(float backgroundConst)
         {
                 StdDraw.setCanvasSize();
-                //coord mapping: i from 0-> 1 -> 4x - 2 on complex plane
                 //iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
                 {
@@ -99,16 +133,13 @@ public class Main
                                 {
                                         StdDraw.setPenColor(StdDraw.BLACK);
                                         StdDraw.point(i, j); //plots i,j on the plane
-                                        //System.out.println(z);
                                 }
                                 else
                                 {
-                                        StdDraw.setPenColor(Color.getHSBColor((inMandelbrot(z) + 66) / 100, (float)1, (float)1));
+                                        StdDraw.setPenColor(Color.getHSBColor((inMandelbrot(z) + backgroundConst) / 100, (float)1, (float)1));
                                         StdDraw.point(i,j);
-                                        System.out.println((inMandelbrot(z) / 100) + 66./100);
                                 }
                         }
-                        //System.out.println("done");
                 }
         }
 
