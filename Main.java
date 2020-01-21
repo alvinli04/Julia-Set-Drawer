@@ -76,13 +76,14 @@ public class Main
                         drawJulia(c, myBackground);
 			StdDraw.save(filename = c.toString() + ".jpg");
                 }
+                //if it's a mandelbrot set, just draw it.
                 else if(whichSet.contains("mandelbrot"))
                 {
                         System.out.println("Please allow up to 5 minutes of render time. To cancel or save after the drawing is finished, press Ctrl + C.");
                         drawMandelbrot(myBackground);
 			StdDraw.save(filename = "Mandelbrot.jpg");
                 }
-
+                //move the file to a Drawings folder.
                 Path move = Files.move(Paths.get(filename), Paths.get("Drawings/" + filename));
         }
 
