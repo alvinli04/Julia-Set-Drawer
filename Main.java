@@ -1,3 +1,20 @@
+/*************************************************
+* Compilation: javac Main.java
+* Execution: java Main
+*
+* This is a program that can draw Mandelbrot and Julia
+* sets, using StdDraw and a self-made complex number
+* class for math operations. It makes some pretty high
+* quality pictures. To view them later, all pictures
+* are saved in the Drawings folder in this directory.
+*
+* Usage: After the program is run, answer the prompts
+* provided in the terminal which configures the settings
+* for the drawing. Once that's done, allow up to 5 minutes
+* of render time. After the drawing is done, it will be
+* saved in the Drawings folder.
+**************************************************/
+
 import java.util.*;
 import java.io.*;
 import java.nio.file.Files;
@@ -9,8 +26,8 @@ public class Main
         //driver function
         public static void main(String[] args) throws IOException
         {
-                float[] backgroundConsts = {0, 66};
-                String[] backgrounds = {"red", "blue"};
+                float[] backgroundConsts = {0, 66, 210, 235};
+                String[] backgrounds = {"red", "blue", "yellow", "green"};
                 //background constants correspond to red, blue on the hsb color scale
 
                 //starts the prompt session to configure settings for the drawing
@@ -87,6 +104,7 @@ public class Main
                 Path move = Files.move(Paths.get(filename), Paths.get("Drawings/" + filename));
         }
 
+        //helper function: determines whether a string is completely numerical.
         public static boolean isNumerical(String strNum) {
             if (strNum == null) {
                 return false;
@@ -120,10 +138,10 @@ public class Main
                 //the number is in the set, the pixel is colored black.
         }
 
+        //draws the julia set given parameters of a complex number center and a background color..
         public static void drawJulia(Complex c, float backgroundConst)
         {
                 StdDraw.setCanvasSize();
-                //coord mapping: i from 0-1 -> 4x - 2 on complex plane
                 //iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
                 {
@@ -137,6 +155,7 @@ public class Main
                                 }
                                 else
                                 {
+                                        //maps a color based on the number of iterations required to escape.
                                         StdDraw.setPenColor(Color.getHSBColor((inJulia(z, c) + backgroundConst) / 100, (float) 1, (float) 1));
                                         StdDraw.point(i,j);
                                 }
@@ -162,6 +181,7 @@ public class Main
                 return -1;//the number is in the set, the pixel is colored black.
         }
 
+        //Draws the mandelbrot set.
         public static void drawMandelbrot(float backgroundConst)
         {
                 StdDraw.setCanvasSize();
@@ -178,6 +198,7 @@ public class Main
                                 }
                                 else
                                 {
+                                        //sets the color, determined by the number of iterations it takes to escape.
                                         StdDraw.setPenColor(Color.getHSBColor((inMandelbrot(z) + backgroundConst) / 100, (float)1, (float)1));
                                         StdDraw.point(i,j);
                                 }
