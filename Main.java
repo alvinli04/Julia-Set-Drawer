@@ -23,14 +23,14 @@ import java.awt.Color;
 
 public class Main
 {
-        //driver function
+        //Driver function
         public static void main(String[] args) throws IOException
         {
                 float[] backgroundConsts = {0, 66, 210, 235};
                 String[] backgrounds = {"red", "blue", "yellow", "green"};
-                //background constants correspond to red, blue on the hsb color scale
+                //Background constants correspond to red, blue on the hsb color scale
 
-                //starts the prompt session to configure settings for the drawing
+                //Starts the prompt session to configure settings for the drawing
                 Scanner sc = new Scanner(System.in);
 
                 String whichSet;
@@ -46,7 +46,7 @@ public class Main
                         }
                 }
 
-                //asks for background color
+                //Asks for background color
                 System.out.print("What color background?\navailable: ");
                 for(String i : backgrounds)
                 {
@@ -69,11 +69,11 @@ public class Main
                 Complex c = new Complex(0, 0);
                 String filename = "";
 
-                //if it's a julia set, asks for a complex number for the center.
+                //If it's a julia set, asks for a complex number for the center.
                 if(whichSet.contains("julia"))
                 {
                         String temp;
-                        //ask for the complex number to run the Julia Set function
+                        //Ask for the complex number to run the Julia Set function
                         System.out.println("Real part of a complex number:");
                         while(!isNumerical(temp = sc.nextLine()))
                         {
@@ -93,18 +93,18 @@ public class Main
                         drawJulia(c, myBackground);
 			StdDraw.save(filename = c.toString() + ".jpg");
                 }
-                //if it's a mandelbrot set, just draw it.
+                //If it's a Mandelbrot set, just draw it.
                 else if(whichSet.contains("mandelbrot"))
                 {
                         System.out.println("Please allow up to 5 minutes of render time. To cancel or save after the drawing is finished, press Ctrl + C.");
                         drawMandelbrot(myBackground);
 			StdDraw.save(filename = "Mandelbrot.jpg");
                 }
-                //move the file to a Drawings folder.
+                //Move the file to a Drawings folder.
                 Path move = Files.move(Paths.get(filename), Paths.get("Drawings/" + filename));
         }
 
-        //helper function: determines whether a string is completely numerical.
+        //Helper function: determines whether a string is completely numerical.
         public static boolean isNumerical(String strNum) {
             if (strNum == null) {
                 return false;
@@ -131,18 +131,18 @@ public class Main
                                 double m = w.mag();
                                 return (float) (i + 1 - Math.log(Math.log(m)/Math.log(2)));
                         }
-                        //the number of iterations i corresponds to a certain color in the picture.
-                        //the log return format instead of linear makes for better color contrast in the picture.
+                        //The number of iterations i corresponds to a certain color in the picture.
+                        //The log return format instead of linear makes for better color contrast in the picture.
                 }
                 return -1;
-                //the number is in the set, the pixel is colored black.
+                //The number is in the set, the pixel is colored black.
         }
 
-        //draws the julia set given parameters of a complex number center and a background color..
+        //Draws the julia set given parameters of a complex number center and a background color..
         public static void drawJulia(Complex c, float backgroundConst)
         {
                 StdDraw.setCanvasSize();
-                //iterate through all pixels to determine whether or not it's in the set.
+                //Iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
                 {
                         for(double j = 0; j <= 1; j+=0.001953125)
@@ -155,7 +155,7 @@ public class Main
                                 }
                                 else
                                 {
-                                        //maps a color based on the number of iterations required to escape.
+                                        //Maps a color based on the number of iterations required to escape.
                                         StdDraw.setPenColor(Color.getHSBColor((inJulia(z, c) + backgroundConst) / 100, (float) 1, (float) 1));
                                         StdDraw.point(i,j);
                                 }
@@ -176,16 +176,16 @@ public class Main
                                 double m = w.mag();
                                 return (float) (i + 1 - Math.log(Math.log(m)/Math.log(2)));
                         }
-                        //the number of iterations i corresponds to a certain color in the picture.
+                        //The number of iterations i corresponds to a certain color in the picture.
                 }
-                return -1;//the number is in the set, the pixel is colored black.
+                return -1;//The number is in the set, the pixel is colored black.
         }
 
         //Draws the mandelbrot set.
         public static void drawMandelbrot(float backgroundConst)
         {
                 StdDraw.setCanvasSize();
-                //iterate through all pixels to determine whether or not it's in the set.
+                //Iterate through all pixels to determine whether or not it's in the set.
                 for(double i = 0; i <= 1; i+=0.001953125)
                 {
                         for(double j = 0; j <= 1; j+=0.001953125)
@@ -194,11 +194,11 @@ public class Main
                                 if(inMandelbrot(z) == -1)
                                 {
                                         StdDraw.setPenColor(StdDraw.BLACK);
-                                        StdDraw.point(i, j); //plots i,j on the plane
+                                        StdDraw.point(i, j); //Plots i,j on the plane
                                 }
                                 else
                                 {
-                                        //sets the color, determined by the number of iterations it takes to escape.
+                                        //Sets the color, determined by the number of iterations it takes to escape.
                                         StdDraw.setPenColor(Color.getHSBColor((inMandelbrot(z) + backgroundConst) / 100, (float)1, (float)1));
                                         StdDraw.point(i,j);
                                 }
