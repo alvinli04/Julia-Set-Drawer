@@ -1,5 +1,7 @@
 import java.util.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.*;
 import java.awt.Color;
 
 public class Main
@@ -11,16 +13,20 @@ public class Main
                 String[] backgrounds = {"red", "blue"};
                 //background constants correspond to red, blue on the hsb color scale
 
-                float myBackground = 66;
+                //starts the prompt session to configure settings for the drawing
                 Scanner sc = new Scanner(System.in);
-                System.out.println("Julia Set or Mandelbrot Set?");
-                String whichSet = sc.nextLine().toLowerCase();
-                //determines whether to draw a Mandelbrot or Julia set
-                if(!whichSet.contains("julia") && !whichSet.contains("mandelbrot"))
+
+                String whichSet;
+                float myBackground = 66;
+
+                while(true)
                 {
                         System.out.println("Please indicate whether you would like a Mandelbrot set or a Julia set.");
-                        String[] placeholder = new String[0];
-                        main(placeholder);
+                        whichSet = sc.nextLine().toLowerCase();
+                        if(whichSet.contains("julia") || whichSet.contains("mandelbrot"))
+                        {
+                                break;
+                        }
                 }
 
                 //asks for background color
@@ -30,32 +36,67 @@ public class Main
                         System.out.print(i + " ");
                 }
                 System.out.println();
-                String myColor = sc.nextLine().toLowerCase();
-                for(int i = 0; i < backgrounds.length; i++){
-                        if(myColor.contains(backgrounds[i])){
-                                myBackground = backgroundConsts[i];
-                                break;
-                        }
-                        System.out.println("color not available, the image will be drawn in blue");
-                }
 
+                outer:
+                while(true)
+                {
+                        String myColor = sc.nextLine().toLowerCase();
+                        for(int i = 0; i < backgrounds.length; i++){
+                                if(myColor.contains(backgrounds[i])){
+                                        myBackground = backgroundConsts[i];
+                                        break outer;
+                                }
+                        }
+                        System.out.println("Please choose an available color.");
+                }
                 Complex c = new Complex(0, 0);
+                String filename = "";
+
+                //if it's a julia set, asks for a complex number for the center.
                 if(whichSet.contains("julia"))
                 {
+                        String temp;
                         //ask for the complex number to run the Julia Set function
                         System.out.println("Real part of a complex number:");
-                        double myRe = sc.nextDouble();
+                        while(!isNumerical(temp = sc.nextLine()))
+                        {
+                                System.out.println("please input a number");
+                        }
+                        Double myRe = Double.parseDouble(temp);
+
                         System.out.println("Imaginary part of a complex number:");
-                        double myIm = sc.nextDouble();
+                        while(!isNumerical(temp = sc.nextLine()))
+                        {
+                                System.out.println("please input a number");
+                        }
+                        Double myIm = Double.parseDouble(temp);
+
                         c = new Complex(myRe, myIm);
+                        System.out.println("Please allow up to 5 minutes of render time. To cancel or save after the drawing is finished, press Ctrl + C.");
                         drawJulia(c, myBackground);
-			StdDraw.save(c.toString() + ".jpg");
+			StdDraw.save(filename = c.toString() + ".jpg");
                 }
                 else if(whichSet.contains("mandelbrot"))
                 {
+                        System.out.println("Please allow up to 5 minutes of render time. To cancel or save after the drawing is finished, press Ctrl + C.");
                         drawMandelbrot(myBackground);
-			StdDraw.save("Mandelbrot.jpg");
+			StdDraw.save(filename = "Mandelbrot.jpg");
                 }
+
+                Path move = Files.move(Paths.get(filename), Paths.get("Drawings/" + filename));
+        }
+
+        public static boolean isNumerical(String strNum) {
+            if (strNum == null) {
+                return false;
+            }
+            try {
+                double d = Double.parseDouble(strNum);
+            }
+            catch (NumberFormatException nfe) {
+                return false;
+            }
+            return true;
         }
 
         //Methods for checking if a point is in a Julia set for some Complex c and drawing it.
